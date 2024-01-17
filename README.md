@@ -35,51 +35,46 @@ Usage
 
 Create a TSID:
 
-```java
-Tsid tsid = TsidCreator.getTsid();
+```kotlin
+val tsid: Tsid = TsidCreator.tsid
 ```
 
 Create a TSID as `long`:
 
-```java
-long number = TsidCreator.getTsid().toLong(); // 38352658567418872
+```kotlin
+val number: Long = TsidCreator.tsid.toLong() // 38352658567418872
 ```
 
 Create a TSID as `String`:
 
-```java
-String string = TsidCreator.getTsid().toString(); // 01226N0640J7Q
+```kotlin
+val string: String = TsidCreator.tsid.toString() // 01226N0640J7Q
 ```
 
 The TSID generator is [thread-safe](https://en.wikipedia.org/wiki/Thread_safety).
 
 ### Dependency
 
-Add these lines to your `pom.xml`:
+Add these lines to your `gradle.build`:
 
-```xml
-<!-- https://search.maven.org/artifact/com.github.f4b6a3/tsid-creator -->
-<dependency>
-  <groupId>com.github.f4b6a3</groupId>
-  <artifactId>tsid-creator</artifactId>
-  <version>5.2.6</version>
-</dependency>
+```groovy
+   implementation 'com.github.corestone:tsid-creator:1.2.6'
 ```
-See more options in [maven.org](https://search.maven.org/artifact/com.github.f4b6a3/tsid-creator).
+See more options in [maven.org](https://search.maven.org/artifact/com.github.corestone/tsid-creator).
 
 ### Modularity
 
 Module and bundle names are the same as the root package name.
 
-*   JPMS module name: `com.github.f4b6a3.tsid`
-*   OSGi symbolic name: `com.github.f4b6a3.tsid`
+*   JPMS module name: `com.github.corestone.tsid`
+*   OSGi symbolic name: `com.github.corestone.tsid`
 
 ### TSID as Long
 
 The `Tsid.toLong()` method simply unwraps the internal `long` value of a TSID.
 
-```java
-long tsid = TsidCreator.getTsid().toLong();
+```kotlin
+val tsid: Long = TsidCreator.tsid.toLong()
 ```
 
 Sequence of TSIDs:
@@ -111,8 +106,8 @@ Sequence of TSIDs:
 
 The `Tsid.toString()` method encodes a TSID to [Crockford's base 32](https://www.crockford.com/base32.html) encoding. The returned string is 13 characters long.
 
-```java
-String tsid = TsidCreator.getTsid().toString();
+```kotlin
+val tsid: String = TsidCreator.tsid.toString()
 ```
 
 Sequence of TSID strings:
@@ -272,199 +267,193 @@ export TSIDCREATOR_NODE_COUNT="65536"
 
 Create a quick TSID:
 
-```java
-Tsid tsid = Tsid.fast();
+```kotlin
+val tsid: Tsid = Tsid.fast()
 ```
 
 ---
 
 Create a TSID from a canonical string (13 chars):
 
-```java
-Tsid tsid = Tsid.from("0123456789ABC");
+```kotlin
+val tsid: Tsid = Tsid.from("0123456789ABC")
 ```
 
 ---
 
 Convert a TSID into a canonical string in lower case:
 
-```java
-String string = tsid.toLowerCase(); // 0123456789abc
+```kotlin
+val string: String = tsid.toLowerCase() // 0123456789abc
 ```
 
 ---
 
 Get the creation instant of a TSID:
 
-```java
-Instant instant = tsid.getInstant(); // 2020-04-15T22:31:02.458Z
+```kotlin
+val instant: Instant = tsid.getInstant() // 2020-04-15T22:31:02.458Z
 ```
 
 ---
 
 Encode a TSID to base-62:
 
-```java
-String string = tsid.encode(62); // 0T5jFDIkmmy
+```kotlin
+val string: String = tsid.encode(62) // 0T5jFDIkmmy
 ```
 
 ---
 
 Format a TSID to a string starting with a letter, where "K" is the letter and "%S" is a placeholder:
 
-```java
-String string = tsid.format("K%S"); // K0AWE5HZP3SKTK
+```kotlin
+val string: String = tsid.format("K%S") // K0AWE5HZP3SKTK
 ```
 
 ---
 
 A key generator that makes substitution easy if necessary:
 
-```java
+```kotlin
 package com.example;
 
-import com.github.f4b6a3.tsid.TsidCreator;
+import kr.waymakers.tsid.TsidCreator
 
-public class KeyGenerator {
-    public static String next() {
-        return TsidCreator.getTsid().toString();
+class KeyGenerator {
+    fun next() : String {
+        return TsidCreator.tsid.toString()
     }
 }
 ```
-```java
-String key = KeyGenerator.next();
+```kotlin
+val key: String = KeyGenerator().next()
 ```
 
 ---
 
 A `TsidFactory` with a FIXED node identifier:
 
-```java
-int node = 256; // max: 2^10
-TsidFactory factory = new TsidFactory(node);
+```kotlin
+val node: Int = 256 // max: 2^10
+val factory: TsidFactory = TsidFactory(node)
 
 // use the factory
-Tsid tsid = factory.create();
+val tsid: Tsid = factory.create()
 ```
 
 ---
 
 A `TsidFactory` with a FIXED node identifier and CUSTOM node bits:
 
-```java
+```kotlin
 // setup a factory for up to 64 nodes and 65536 ID/ms.
-TsidFactory factory = TsidFactory.builder()
-    .withNodeBits(6)      // max: 20
-    .withNode(63)         // max: 2^nodeBits
-    .build();
+val factory = TsidFactory(
+   nodeBits = 6, // max: 20
+   node = 63)    // max: 2^nodeBits
 
 // use the factory
-Tsid tsid = factory.create();
+val tsid: Tsid = factory.create()
 ```
 
 ---
 
 A `TsidFactory` with a CUSTOM epoch:
 
-```java
+```kotlin
 // use a CUSTOM epoch that starts from the fall of the Berlin Wall
-Instant customEpoch = Instant.parse("1989-11-09T00:00:00Z");
-TsidFactory factory = TsidFactory.builder().withCustomEpoch(customEpoch).build();
+val customEpoch: Instant = Instant.parse("1989-11-09T00:00:00Z")
+val factory: TsidFactory = TsidFactory(customEpoch = customEpoch)
 
 // use the factory
-Tsid tsid = factory.create();
+val tsid: Tsid = factory.create()
 ```
 
 ---
 
 A `TsidFactory` with `java.util.Random`:
 
-```java
+```kotlin
+import java.util.Random
+
 // use a `java.util.Random` instance for fast generation
-TsidFactory factory = TsidFactory.builder().withRandom(new Random()).build();
+val factory: TsidFactory = TsidFactory(random = Random())
 
 // use the factory
-Tsid tsid = factory.create();
+val tsid: Tsid = factory.create()
 ```
 
 ---
 
 A `TsidFactory` with `RandomGenerator` (JDK 17+):
 
-```java
+```kotlin
 // use a random function that returns an int value
-RandomGenerator random = RandomGenerator.getDefault();
-TsidFactory factory = TsidFactory.builder()
-    .withRandomFunction(() -> random.nextInt())
-    .build();
+val random: RandomGenerator = RandomGenerator.getDefault()
+val factory: TsidFactory = TsidFactory(randomFunction = random)
 
 // use the factory
-Tsid tsid = factory.create();
+val tsid: Tsid = factory.create()
 ```
 
 ---
 
 A `TsidFactory` with `ThreadLocalRandom`:
 
-```java
+```kotlin
+
+import java.util.concurrent.ThreadLocalRandom
+
 // use a random function that returns an int value
-TsidFactory factory = TsidFactory.builder()
-    .withRandomFunction(() -> ThreadLocalRandom.current().nextInt())
-    .build();
+val factory: TsidFactory =
+   TsidFactory(randomFuction = Any({ ThreadLocalRandom.current().nextInt() }))
 
 // use the factory
-Tsid tsid = factory.create();
+val tsid: Tsid = factory.create()
 ```
 
 ---
 
 A `TsidFactory` that creates TSIDs similar to [Twitter Snowflakes](https://github.com/twitter-archive/snowflake):
 
-```java
+```kotlin
 // Twitter Snowflakes have 5 bits for datacenter ID and 5 bits for worker ID
-int datacenter = 1; // max: 2^5-1 = 31
-int worker = 1;     // max: 2^5-1 = 31
-int node = (datacenter << 5 | worker); // max: 2^10-1 = 1023
+val datacenter: Int = 1 // max: 2^5-1 = 31
+val worker: Int = 1     // max: 2^5-1 = 31
+val node: Int = (datacenter shl 5) or worker // max: 2^10-1 = 1023
 
 // Twitter Epoch is fixed in 1288834974657 (2010-11-04T01:42:54.657Z)
-Instant customEpoch = Instant.ofEpochMilli(1288834974657L);
+val customEpoch: Instant = Instant.ofEpochMilli(1288834974657L)
 
 // a function that returns an array with ZEROS, making the factory
 // to RESET the counter to ZERO when the millisecond changes
-IntFunction<byte[]> randomFunction = (x) -> new byte[x];
+val randomFunction: IntFunction<ByteArray> = IntFunction { x -> ByteArray(x) }
 
 // a factory that returns TSIDs similar to Twitter Snowflakes
-TsidFactory factory = TsidFactory.builder()
-		.withRandomFunction(randomFunction)
-		.withCustomEpoch(customEpoch)
-		.withNode(node)
-		.build();
+val factory: TsidFactory = TsidFactory(node = node, randomFunction = randomFunction, customEpoch = customEpoch)
 
 // use the factory
-Tsid tsid = factory.create();
+val tsid: Tsid = factory.create()
 ```
 
 ---
 
 A `TsidFactory` that creates TSIDs similar to [Discord Snowflakes](https://discord.com/developers/docs/reference#snowflakes):
 
-```java
+```kotlin
 // Discord Snowflakes have 5 bits for worker ID and 5 bits for process ID
-int worker = 1;  // max: 2^5-1 = 31
-int process = 1; // max: 2^5-1 = 31
-int node = (worker << 5 | process); // max: 2^10-1 = 1023
+val worker: Int = 1  // max: 2^5-1 = 31
+val process: Int = 1 // max: 2^5-1 = 31
+val node: Int = (datacenter shl 5) or worker // max: 2^10-1 = 1023
 
 // Discord Epoch starts in the first millisecond of 2015
-Instant customEpoch = Instant.parse("2015-01-01T00:00:00.000Z");
+val customEpoch: Instant = Instant.parse("2015-01-01T00:00:00.000Z")
 
 // a factory that returns TSIDs similar to Discord Snowflakes
-TsidFactory factory = TsidFactory.builder()
-		.withCustomEpoch(customEpoch)
-		.withNode(node)
-		.build();
+val factory: TsidFactory = TsidFactory(node = node, customEpoch = customEpoch)
 
 // use the factory
-Tsid tsid = factory.create();
+val tsid: Tsid = factory.create()
 ```
 
 ---

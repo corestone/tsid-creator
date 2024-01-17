@@ -4,22 +4,21 @@ import kr.waymakers.tsid.TsidFactory
 import java.util.*
 
 /**
- * This is is not included in the [TestSuite] because it may take a long
+ * This is not included in the [TestSuite] because it may take a long
  * time to finish.
- */
-class UniquenessTest
-/**
  * Initialize the test.
  *
  * @param threadCount
  * @param requestCount
  * @param verbose
  */
-(// Number of threads to run
+class UniquenessTest // Number of threads to run
+(
 	private val threadCount: Int, // Number of requests for thread
 	private val requestCount: Int, // Show progress or not
 	private val verbose: Boolean
 ) {
+
 	private val hashSet = HashSet<Long>()
 
 	/**

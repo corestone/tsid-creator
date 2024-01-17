@@ -3,3 +3,4 @@
  */
 
 rootProject.name = "tsid-creator"
+include("benchmark")

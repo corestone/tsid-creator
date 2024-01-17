@@ -48,12 +48,12 @@ public class Throughput {
 	}
 
 	@Benchmark
-	public Tsid TsidCreator_getTsid256() {
+	public Tsid TsidCreator_getTsid0256() {
 		return TsidCreator.getTsid256();
 	}
 
 	@Benchmark
-	public String TsidCreator_getTsid256_toString() {
+	public String TsidCreator_getTsid0256_toString() {
 		return TsidCreator.getTsid256().toString();
 	}
 
